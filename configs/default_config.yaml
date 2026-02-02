@@ -1,0 +1,68 @@
+# Project metadata
+project_name: ML Sensor Person Detection
+version: 1.0.0
+seed: 42
+
+# Data configuration
+data:
+  dataset_name: coco/2017
+  img_size: 96
+  batch_size: 32
+  train_samples: 10000
+  val_samples: 2000
+  test_samples: 2000
+  use_grayscale: true
+  num_classes: 2
+  use_augmentation: true
+  aug_rotation_range: 15.0
+  aug_brightness_delta: 0.2
+  aug_flip_horizontal: true
+
+# Model configuration
+model:
+  architecture: mobilenetv2
+  input_shape: [96, 96, 1]
+  alpha: 0.5
+  dropout_rate: 0.3
+  use_transfer_learning: false
+  activation: relu
+
+# Training configuration
+training:
+  epochs: 50
+  initial_lr: 0.001
+  optimizer: adam
+  loss: binary_crossentropy
+  metrics: [accuracy, precision, recall]
+  lr_schedule: cosine
+  lr_warmup_epochs: 5
+  early_stopping_patience: 10
+  reduce_lr_patience: 5
+  save_best_only: true
+  monitor_metric: val_accuracy
+  monitor_mode: max
+
+# Quantization configuration
+quantization:
+  method: ptq
+  target_dtype: int8
+  calibration_samples: 1000
+  inference_input_type: uint8
+  inference_output_type: uint8
+
+# Sensor configuration
+sensor:
+  sensor_id: 0x62
+  interface: i2c
+  confidence_threshold: 0.5
+  target_platform: arm_cortex_m4
+
+# Paths
+data_dir: data
+model_dir: models
+results_dir: results
+logs_dir: logs
+
+# Experiment tracking
+use_tensorboard: true
+use_wandb: false
